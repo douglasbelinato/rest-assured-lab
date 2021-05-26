@@ -1,7 +1,6 @@
 package br.com.lab;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -15,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserResourceTest {
 
-    @BeforeEach
-    public void setup() {
+    @BeforeAll
+    public static void setup() {
         baseURI = "http://restapi.wcaquino.me";
     }
 

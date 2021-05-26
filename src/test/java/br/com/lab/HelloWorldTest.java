@@ -1,9 +1,7 @@
 package br.com.lab;
 
 import io.restassured.RestAssured;
-import io.restassured.http.Method;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.get;
@@ -11,8 +9,8 @@ import static io.restassured.RestAssured.given;
 
 class HelloWorldTest {
 
-    @BeforeEach
-    public void setup() {
+    @BeforeAll
+    public static void setup() {
         RestAssured.baseURI = "http://restapi.wcaquino.me";
     }
 

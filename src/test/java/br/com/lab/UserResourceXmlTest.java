@@ -1,12 +1,15 @@
 package br.com.lab;
 
+import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.internal.path.xml.NodeImpl;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasItems;
@@ -16,9 +19,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserResourceXmlTest {
 
-    @BeforeEach
-    public void setup() {
-        baseURI = "http://restapi.wcaquino.me";
+    @BeforeAll
+    public static void setup() {
+        RestAssured.baseURI = "http://restapi.wcaquino.me";
+
+        var requestSpecBuilder = new RequestSpecBuilder();
+        requestSpecBuilder.log(LogDetail.ALL);
+
+        var responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(200);
+
+        RestAssured.requestSpecification = requestSpecBuilder.build();
+        RestAssured.responseSpecification = responseSpecBuilder.build();
     }
 
     @Test
@@ -27,7 +39,7 @@ class UserResourceXmlTest {
         .when()
             .get("usersXml/3")
         .then()
-            .statusCode(200)
+//            .statusCode(200)
             .body("user.name", is("Ana Julia"))
             .body("user.@id", is("3"))
             .body("user.filhos.name.size()", is(2))
@@ -43,7 +55,7 @@ class UserResourceXmlTest {
         .when()
             .get("usersXml/3")
         .then()
-            .statusCode(200)
+//            .statusCode(200)
             .rootPath("user")
             .body("name", is("Ana Julia"))
             .body("@id", is("3"))
@@ -66,7 +78,7 @@ class UserResourceXmlTest {
         .when()
             .get("usersXml")
         .then()
-            .statusCode(200)
+//            .statusCode(200)
             .body("users.user.size()", is(3))
             .body("users.user.findAll{it.age.toInteger() <= 25}.size()", is(2))
             .body("users.user.@id", hasItems("1", "2", "3"))
@@ -98,7 +110,7 @@ class UserResourceXmlTest {
         .when()
         .   get("usersXml")
         .then()
-            .statusCode(200)
+//            .statusCode(200)
             .body(hasXPath("count(/users/user)", is("3")))
             .body(hasXPath("/users/user[@id = '1']"))
             .body(hasXPath("//user[@id = '2']"))
