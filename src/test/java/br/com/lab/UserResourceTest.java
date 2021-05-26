@@ -120,4 +120,106 @@ class UserResourceTest {
         assertTrue(names.get(0).equalsIgnoreCase("Maria Joaquina"));
     }
 
+    @Test
+    void testShouldSaveUser() {
+        given()
+            .log().all()
+            .contentType("application/json")
+            .body("{ \"name\": \"Jose\", \"age\": 35 }")
+        .when()
+            .post("users")
+        .then()
+            .log().all()
+            .statusCode(201)
+            .body("id", is(notNullValue()))
+            .body("name", is("Jose"))
+            .body("age", is(35));
+    }
+
+    @Test
+    void testShouldNotSaveUser() {
+        given()
+        .log().all()
+            .contentType("application/json")
+            .body("{ \"age\": 35 }")
+        .when()
+            .post("users")
+        .then()
+            .log().all()
+            .statusCode(400)
+            .body("error", is("Name é um atributo obrigatório"));
+    }
+
+    @Test
+    void testShouldUpdateUser() {
+        given()
+            .log().all()
+            .contentType("application/json")
+            .body("{ \"name\": \"Luiza\", \"age\": 18 }")
+        .when()
+            .put("users/1")
+        .then()
+            .log().all()
+            .statusCode(200)
+            .body("id", is(1))
+            .body("name", is("Luiza"))
+            .body("age", is(18));
+    }
+
+    @Test
+    void testShouldUpdateUserUsingUrlParams() {
+        given()
+            .log().all()
+            .contentType("application/json")
+            .body("{ \"name\": \"Luiza\", \"age\": 18 }")
+        .when()
+            .put("{path}/{id}", "users", "1")
+        .then()
+            .log().all()
+            .statusCode(200)
+            .body("id", is(1))
+            .body("name", is("Luiza"))
+            .body("age", is(18));
+    }
+
+    @Test
+    void testShouldUpdateUserUsingUrlParams2() {
+        given()
+            .log().all()
+            .contentType("application/json")
+            .pathParam("path", "users")
+            .pathParam("id", "1")
+            .body("{ \"name\": \"Luiza\", \"age\": 18 }")
+        .when()
+            .put("{path}/{id}")
+        .then()
+            .log().all()
+            .statusCode(200)
+            .body("id", is(1))
+            .body("name", is("Luiza"))
+            .body("age", is(18));
+    }
+
+    @Test
+    void testShouldRemoveUser() {
+        given()
+            .log().all()
+        .when()
+            .delete("users/1")
+        .then()
+            .log().all()
+            .statusCode(204);
+    }
+
+    @Test
+    void testShouldNotDeleteUser() {
+        given()
+        .log().all()
+        .when()
+            .delete("users/1234")
+        .then()
+            .log().all()
+            .statusCode(400)
+            .body("error", is("Registro inexistente"));
+    }
 }
