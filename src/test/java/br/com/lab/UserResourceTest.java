@@ -1,13 +1,17 @@
 package br.com.lab;
 
+import br.com.lab.model.User;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -134,6 +138,65 @@ class UserResourceTest {
             .body("id", is(notNullValue()))
             .body("name", is("Jose"))
             .body("age", is(35));
+    }
+
+    @Test
+    void testShouldSaveUserSendingDataViaMap() {
+        var params = new HashMap<String, Object>();
+        params.put("name", "Jose");
+        params.put("age", 35);
+
+        given()
+            .log().all()
+            .contentType("application/json")
+            .body(params)
+        .when()
+            .post("users")
+        .then()
+            .log().all()
+            .statusCode(201)
+            .body("id", is(notNullValue()))
+            .body("name", is("Jose"))
+            .body("age", is(35));
+    }
+
+    @Test
+    void testShouldSaveUserUsingModelClass() {
+        var user = new User("Jose", 35);
+
+        var savedUser = given()
+            .log().all()
+            .contentType(ContentType.JSON)
+            .body(user)
+        .when()
+            .post("users")
+        .then()
+            .log().all()
+            .statusCode(201)
+            .extract().body().as(User.class);
+
+        assertEquals(user.getName(), savedUser.getName());
+        assertEquals(user.getAge(), savedUser.getAge());
+        assertThat(savedUser.getId(), is(notNullValue()));
+    }
+
+    @Test
+    void testShouldSaveUserUsingModelClassWithXml() {
+        var user = new User("Jose", 35);
+
+        var savedUser = given()
+            .log().all()
+            .contentType(ContentType.XML)
+            .body(user)
+        .when()
+            .post("usersXML")
+            .then()
+            .log().all()
+            .extract().body().as(User.class);
+
+        assertEquals(user.getName(), savedUser.getName());
+        assertEquals(user.getAge(), savedUser.getAge());
+        assertThat(savedUser.getId(), is(notNullValue()));
     }
 
     @Test
