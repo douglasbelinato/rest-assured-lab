@@ -1,10 +1,11 @@
-package br.com.lab;
+package br.com.lab.samples;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.internal.path.xml.NodeImpl;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -127,5 +128,10 @@ class UserResourceXmlTest {
             .body(hasXPath("//user[age < 24]/name", is("Ana Julia")))
             .body(hasXPath("//user[age > 20 and age < 30]/name", is("Maria Joaquina")))
             .body(hasXPath("//user[age > 20][age < 30]/name", is("Maria Joaquina")));
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        RestAssured.reset();
     }
 }

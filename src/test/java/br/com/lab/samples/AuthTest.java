@@ -1,4 +1,4 @@
-package br.com.lab;
+package br.com.lab.samples;
 
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 
 class AuthTest {
@@ -85,12 +85,11 @@ class AuthTest {
                 .get("http://barrigarest.wcaquino.me/contas")
                 .then()
                 .log().all()
-                .statusCode(200)
-                .body("nome", hasItem("Conta de teste"));
+                .statusCode(200);
     }
 
     @Test
-    void testWebHtmlAuth() {
+    void testWebHtmlAuthWithCookie() {
         String cookie = given()
                 .log().all()
                 .contentType(ContentType.URLENC.withCharset("UTF-8"))
@@ -113,7 +112,7 @@ class AuthTest {
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body("html.body.table.tbody.tr[0].td[0]", is("Conta de teste"));
+                .body("html.body.find{it.table.@id = 'tabelaSaldo'}.table.thead.tr.th[0]", containsString("Conta"));
     }
 
 }

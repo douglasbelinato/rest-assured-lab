@@ -1,8 +1,9 @@
-package br.com.lab;
+package br.com.lab.samples;
 
 import io.restassured.RestAssured;
 import io.restassured.matcher.RestAssuredMatchers;
 import io.restassured.module.jsv.JsonSchemaValidator;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXParseException;
@@ -51,5 +52,10 @@ class SchemaTest {
             .log().all()
             .statusCode(200)
             .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("users.json"));
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        RestAssured.reset();
     }
 }

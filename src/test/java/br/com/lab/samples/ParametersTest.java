@@ -1,8 +1,9 @@
-package br.com.lab;
+package br.com.lab.samples;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -91,6 +92,11 @@ class ParametersTest {
                 .contentType(Matchers.containsString("UTF-8"))
                 .body(hasXPath("count(//table/tr)", is("4")))
                 .body(hasXPath("//td[text() = '2']/../td[2]", is("Maria Joaquina")));
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        RestAssured.reset();
     }
 
 }

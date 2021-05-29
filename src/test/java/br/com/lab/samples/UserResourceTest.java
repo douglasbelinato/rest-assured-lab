@@ -1,7 +1,9 @@
-package br.com.lab;
+package br.com.lab.samples;
 
 import br.com.lab.model.User;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -284,5 +286,10 @@ class UserResourceTest {
             .log().all()
             .statusCode(400)
             .body("error", is("Registro inexistente"));
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        RestAssured.reset();
     }
 }

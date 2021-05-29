@@ -1,6 +1,7 @@
-package br.com.lab;
+package br.com.lab.samples;
 
 import io.restassured.RestAssured;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -61,5 +62,10 @@ class FileUploadAndDownloadTest {
         }
 
         assertThat(file.length(), greaterThan(1L));
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        RestAssured.reset();
     }
 }

@@ -21,6 +21,7 @@
         <rest-assured.version>4.2.0</rest-assured.version>
         <json-schema-validator.version>4.4.0</json-schema-validator.version>
         <jaxb.api.version>2.3.1</jaxb.api.version>
+        <lombok.version>1.18.20</lombok.version>
     </properties>
 
     <dependencies>
@@ -33,6 +34,12 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>${jaxb.api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
         </dependency>
 
         <dependency>
